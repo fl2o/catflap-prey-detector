@@ -1,0 +1,37 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+
+# Testing
+.pytest_cache/
+
+# IDE
+.cursor/
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Local uv configuration
+uv.toml
+
+# Syncthing
+.stignore
+
+# direnv configuration
+.envrc
+
+# google GENAI
+google-sa.json
+
+# Runtime files
+runtime/

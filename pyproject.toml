@@ -1,0 +1,50 @@
+[build-system]
+requires = ["setuptools>=45", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "catflap-prey-detector"
+version = "0.1.0"
+description = "Smart catflap system with AI-powered prey detection"
+readme = "README.md"
+requires-python = ">=3.11"
+license = "Apache-2.0"
+keywords = ["catflap", "pet", "cat", "prey-detection", "computer-vision", "raspberry-pi", "yolo", "home-automation"]
+dependencies = [
+    "aiohttp>=3.12.15",
+    "culsans>=0.9.0",
+    "fastapi>=0.116.1",
+    "google-cloud-aiplatform>=1.109.0",
+    "ncnn>=1.0.20250503",
+    "numpy==1.24.2",
+    "opencv-python>=4.8.1.78",
+    "pydantic-settings>=2.0.0",
+    "pytest>=8.4.1",
+    "pytest-asyncio>=1.1.0",
+    "python-telegram-bot[job-queue]>=22.3",
+    "scikit-image>=0.25.2",
+    "tenacity>=9.1.2",
+    "uvicorn>=0.35.0",
+]
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[project.scripts]
+catflap-detector = "catflap_prey_detector.main:main"
+
+[tool.uv]
+default-groups = []
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py", "*_test.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+
+[dependency-groups]
+dev = [
+]
