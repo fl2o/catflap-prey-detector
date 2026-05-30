@@ -129,7 +129,22 @@ sudo iwconfig wlan0 power off
 
 ## Running as a Service
 
-Configure the detector to start automatically on boot using systemd.
+Configure the detector to start automatically on boot using systemd. From the
+repo root:
+
+```bash
+make install-service
+```
+
+This installs the service and its watchdog/journald drop-ins (unit files live in
+[`deploy/`](../deploy/)), so the detector starts on boot, restarts if it exits,
+and recovers from hangs on its own. See [Reliability](RELIABILITY.md) for what
+each layer does and [`deploy/README.md`](../deploy/README.md) for manual install
+and uninstall steps.
+
+> **Note:** the `tmux` and `make run` workflow above is for interactive/manual
+> runs. For unattended operation use the service instead — don't run both at
+> once, since the camera can't be opened twice.
 
 
 ## Monitoring Logs

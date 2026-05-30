@@ -92,6 +92,7 @@ AI-powered system that detects when your cat is carrying prey and automatically 
 - 📱 Remote control and notifications via Telegram
 - 👁️ Monitors and notifies for multiple object classes (cats, persons, etc.)
 - ☁️ Optional long-term image persistence to Google Cloud Storage
+- 🛡️ Runs unattended as a systemd service with auto-restart and watchdog recovery
 
 ## How to get started
 
@@ -127,7 +128,7 @@ AI-powered system that detects when your cat is carrying prey and automatically 
 
 ### 7️⃣ Deploy & Monitor
 - Set up remote access with [Deployment Tools](docs/DEPLOYMENT_TOOLS.md)
-- Configure as a systemd service for auto-start
+- Install as a systemd service for auto-start and self-recovery: `make install-service` (unit files in [`deploy/`](deploy/), details in [Reliability](docs/RELIABILITY.md))
 - Monitor logs and performance
 
 ## Hardware Requirements
@@ -211,6 +212,7 @@ The system automatically:
 - **[Configuration](docs/CONFIGURATION.md)** - Configuration options and tuning
 - **[Prey Detection API](docs/PREY_DETECTION_API.md)** - API documentation and usage
 - **[Architecture](docs/ARCHITECTURE.md)** - System design overview
+- **[Reliability](docs/RELIABILITY.md)** - Running unattended: systemd service, watchdog, self-recovery
 - **[Deployment Tools](docs/DEPLOYMENT_TOOLS.md)** - SSH, Tailscale, Syncthing, WiFi management
 
 ### Module Documentation

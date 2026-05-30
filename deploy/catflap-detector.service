@@ -1,0 +1,34 @@
+# Catflap Prey Detector systemd service.
+#
+# The <USER> and <INSTALL_DIR> placeholders below are filled in automatically by
+# `make install-service` (from `whoami` and the repo path). To install by hand,
+# copy this file to /etc/systemd/system/catflap-detector.service and replace:
+#   <USER>         -> the Linux user that runs the detector (e.g. pi)
+#   <INSTALL_DIR>  -> the absolute path to this repo (e.g. /home/pi/catflap-prey-detector)
+# then: sudo systemctl daemon-reload && sudo systemctl enable --now catflap-detector
+#
+# Note: ExecStart sources <INSTALL_DIR>/.envrc for configuration (BOT_TOKEN,
+# GROUP_ID, PREY_DETECTOR_API_KEY, ...). That file is gitignored and must exist
+# on the machine before starting the service. See docs/CONFIGURATION.md.
+
+[Unit]
+Description=Catflap Prey Detector
+After=network-online.target time-sync.target
+Wants=network-online.target
+StartLimitIntervalSec=0
+
+[Service]
+Type=notify
+NotifyAccess=main
+User=<USER>
+WorkingDirectory=<INSTALL_DIR>
+Environment=PYTHONUNBUFFERED=1
+ExecStart=/bin/bash -c 'set -a; . <INSTALL_DIR>/.envrc; set +a; exec <INSTALL_DIR>/.venv/bin/catflap-detector'
+Restart=always
+RestartSec=5
+TimeoutStartSec=300
+WatchdogSec=120
+SyslogIdentifier=catflap
+
+[Install]
+WantedBy=multi-user.target

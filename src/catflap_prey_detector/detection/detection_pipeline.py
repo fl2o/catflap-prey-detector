@@ -1,6 +1,7 @@
 import logging
 from datetime import datetime
 
+from catflap_prey_detector.core import watchdog
 from catflap_prey_detector.notifications.telegram_bot import notify_event
 from catflap_prey_detector.notifications import telegram_bot
 from catflap_prey_detector.detection.tracker import DetectionTracker
@@ -36,10 +37,12 @@ def run_detection_pipeline(notify_telegram=False, save_images=False, prey_detect
     
     with camera_manager:
         logger.info("=== Starting main detection loop ===")
+        watchdog.notify_ready()
         try:
             while True:
                 try:
                     current_frame = camera_manager.capture_frame()
+                    watchdog.pet()
                     timestamp = datetime.now()
                     logger.debug(f"Captured frame at {timestamp.strftime('%Y-%m-%d %H:%M:%S.%f')[:-3]}")
                     

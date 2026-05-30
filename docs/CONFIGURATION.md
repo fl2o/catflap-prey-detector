@@ -7,6 +7,7 @@
 - [Optional Environment Variables](#optional-environment-variables)
   - [Google Cloud Storage (for long-term image persistence)](#google-cloud-storage-for-long-term-image-persistence)
 - [Configuration File](#configuration-file)
+- [Logging](#logging)
 - [Key Tunable Parameters](#key-tunable-parameters)
   - [Catflap Lock Duration](#catflap-lock-duration)
   - [YOLO Detection Classes](#yolo-detection-classes)
@@ -69,6 +70,21 @@ export PREY_DETECTOR_API_KEY="your_api_key"
 # export GCS_BUCKET_NAME="catflap"
 # export GOOGLE_APPLICATION_CREDENTIALS="./google-sa.json"
 ```
+
+## Logging
+
+Application logs are written to `runtime/logs/main_app.log` and also to the
+console (captured by journald when running as a service).
+
+- **Bounded log size** — the file handler rotates at 5 MB and keeps 3 backups,
+  so logs are capped at ~20 MB total and can never fill or wear out the SD card.
+- **Quieted third-party loggers** — noisy libraries (httpx, telegram, google,
+  PIL, ...) are pinned to `WARNING`. Besides cutting volume, this prevents the
+  HTTP client from logging the Telegram bot token in request URLs.
+
+Both are configured in `src/catflap_prey_detector/core/logging.py`. When running
+as a systemd service, journald retention is bounded separately — see
+[Reliability](RELIABILITY.md).
 
 ## Key Tunable Parameters
 

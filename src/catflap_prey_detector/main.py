@@ -4,6 +4,7 @@ import signal
 import sys
 import logging
 import os
+import time
 
 from catflap_prey_detector.notifications.telegram_bot import main as bot_main
 from catflap_prey_detector.detection.detection_pipeline import run_detection_pipeline
@@ -20,6 +21,29 @@ def signal_handler(signum, frame):
     logger = logging.getLogger(__name__)
     logger.info("Shutdown signal received, terminating application...")
     sys.exit(0)
+
+
+def _supervise_detection(*args) -> None:
+    """Run the detection pipeline forever, restarting it if it ever stops.
+
+    The pipeline is meant to loop indefinitely; if it returns or raises (e.g. a
+    camera fault), restart it with capped exponential backoff so detection can
+    never silently stay dead while the rest of the process keeps running.
+    """
+    logger = logging.getLogger(__name__)
+    backoff = 5
+    while True:
+        started = time.monotonic()
+        try:
+            run_detection_pipeline(*args)
+            logger.error("Detection pipeline exited unexpectedly; restarting in %ss", backoff)
+        except Exception:
+            logger.exception("Detection pipeline crashed; restarting in %ss", backoff)
+        # If it had been running healthily for a while, reset the backoff.
+        if time.monotonic() - started > 300:
+            backoff = 5
+        time.sleep(backoff)
+        backoff = min(backoff * 2, 60)
 
 
 async def app():
@@ -40,7 +64,7 @@ async def app():
     try:
         main_logger.info("Initializing camera detector thread...")
         detector_thread = threading.Thread(
-            target=run_detection_pipeline, 
+            target=_supervise_detection,
             args=(
                 detector_config.telegram_enabled, 
                 detector_config.save_images, 
