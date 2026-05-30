@@ -6,6 +6,7 @@
 ## Table of Contents
 - [Overview](#overview)
 - [Gallery](#gallery)
+  - [Prey Captures](#prey-captures)
   - [System in Action](#system-in-action)
   - [Hardware Setup](#hardware-setup)
 - [How to get started](#how-to-get-started)
@@ -36,6 +37,13 @@ AI-powered system that detects when your cat is carrying prey and automatically 
 ## Gallery
 
 <div align="center">
+
+### Prey Captures
+
+<img src="docs/images/prey_captures.gif" width="480" alt="Detected prey captures"/>
+
+<br/>
+<em>A selection of real prey captures flagged by the detector (daytime &amp; infrared night)</em>
 
 ### System in Action
 
